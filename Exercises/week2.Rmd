@@ -22,30 +22,56 @@ from CRAN using either
 the `Tools -> Install Packages` 
 menu or the `install.packages()` function from 
 the command line.
+```{r 1}
+#install.packages("dplyr")
+library(gapminder)
+library(ggplot2)
+library(dplyr)
+```
 
 2. Use the `library()` command to load these three
 packages, and use
 `data()` to load the `gapminder` dataset.
-
+```{r 2}
+data("gapminder")
+```
 
 3. Use `help("gapminder")` to learn about the
 dataset, `head()` to examine the variable names and 
 `summary()` to get a summary of each variable. What
 does the summary of the `gdpPercap` variable tell you
 about its distribution?
+```{r 3}
+head(gapminder)
+summary(gapminder)
+```
 
 4. Add the natural log of `gdpPercap` to the dataset using
 the `mutate()` function from `dplyr`. Call your new
 variable `lgdpPercap`.
+```{r 4}
+gapminder <- gapminder %>%
+  mutate(lgdpPercap = log(gdpPercap))
+```
 
 5. Use `filter()` to 
 create a new dataset `gm1952` that contains the 
 data in `gapminder` that is 
 - from the year 1952, and
 - from either Africa, Europe or Asia.
+```{r 5}
+gm1952 <- gapminder %>%
+  filter(year == 1952 & !continent %in% c("Oceania", "Americas"))
+```
+
 
 6. Similarly create `gm2007` comprised of the `gapminder` 
 data from 2007 on Africa, Europe and Asia. 
+
+```{r 6}
+gm2007 <- gapminder %>%
+  filter(year == 2007 & !continent %in% c("Oceania", "Americas"))
+```
 
 7. Use `ggplot()` to  plot `lifeExp` _vs_ `lgdpPercap`
 from the `gm1952` dataset.
@@ -59,6 +85,13 @@ search for the countries using either
 `filter()` to subset the data,
 `View()` to view the data.
 
+```{r 7}
+ggplot(gm1952,aes(x=lifeExp,y=lgdpPercap,color=continent)) + geom_point() + geom_smooth(method = "lm",se = FALSE)
+gm1952 %>%
+  filter(lgdpPercap > 10) %>%
+  View()
+```
+
 
 8. Repeat the plot from (6) with the 2007 data. Do you
 see any outliers with respect to `lifeExp`? 
@@ -67,6 +100,29 @@ search for the countries using either
 `filter()` to subset the data,
 `View()` to view the data.
 
+```{r 8}
+ggplot(gm2007,aes(x=lifeExp,y=lgdpPercap,color=continent)) + geom_point() + geom_smooth(method = "lm",se = FALSE)
+gm2007 %>%
+  filter(lgdpPercap < 9 & continent == "Europe") %>%
+  View()
+```
 
 9. Comment on differences between the 1952 and 2007 
 plots.
+
+The mean lgdpPercap is higher in 2007. There is a positive linear correlation between lifeExp and lgdpPercap. The slope is steeper in 2007 for Asia and Europe but appears unchanged for Africa. The Asian country of Japan has the highest life expectancy in 2007. Even though life expectancy has increased by ~60% between each period, Afghanistan and Turkey have the lowest life expectancy in their respective continents for both periods, despite these increases. 
+```{r 9}
+gm2007 %>%
+  filter(lifeExp == max(lifeExp)) %>%
+  View()
+gm1952 %>%
+  group_by(continent) %>%
+  filter(lifeExp == min(lifeExp)) %>%
+  View()
+gm2007 %>%
+  group_by(continent) %>%
+  filter(lifeExp == min(lifeExp)) %>%
+  View()
+```
+
+
