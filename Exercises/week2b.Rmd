@@ -57,6 +57,17 @@ testerr(traindat,testdat,poly_degree=6)
 
 * **Exercise** Fit the model with best test error to the training data
 and plot the results.
+```{r}
+library(ggplot2)
+fit <- lm(y~poly(x,3),data = traindat)
+ngrid <- 100
+newx = seq(from=Xmin,to=Xmax,length=ngrid)
+newdat <- data.frame(x=newx)
+fhat <- predict(fit,newdata=newdat)
+preds <- data.frame(y=fhat,x=newx)
+ggplot(traindat,aes(x=x,y=y))+geom_point()+geom_line(data=preds,color="blue")
+```
+
 
 ## Expected test error
 

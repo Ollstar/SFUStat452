@@ -86,7 +86,7 @@ search for the countries using either
 `View()` to view the data.
 
 ```{r 7}
-ggplot(gm1952,aes(x=lifeExp,y=lgdpPercap,color=continent)) + geom_point() + geom_smooth(method = "lm",se = FALSE)
+ggplot(gm1952,aes(y=lifeExp,x=lgdpPercap,color=continent)) + geom_point() + geom_smooth(method = "lm",se = FALSE)
 gm1952 %>%
   filter(lgdpPercap > 10) %>%
   View()
@@ -101,7 +101,7 @@ search for the countries using either
 `View()` to view the data.
 
 ```{r 8}
-ggplot(gm2007,aes(x=lifeExp,y=lgdpPercap,color=continent)) + geom_point() + geom_smooth(method = "lm",se = FALSE)
+ggplot(gm2007,aes(y=lifeExp,x=lgdpPercap,color=continent)) + geom_point() + geom_smooth(method = "lm",se = FALSE)
 gm2007 %>%
   filter(lgdpPercap < 9 & continent == "Europe") %>%
   View()
